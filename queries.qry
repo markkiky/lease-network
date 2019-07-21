@@ -1,0 +1,28 @@
+/** Queries for dlease business network
+*/
+
+query selectProperty {
+  description: "Select all properties"
+  statement: 
+    SELECT org.markn.mynetwork.Property
+}
+
+query selectPropertyByOwner {
+  description: "Select all properties of the specified owner"
+  statement:
+    SELECT org.markn.mynetwork.Property
+      WHERE (owner == _$owner)
+}
+
+query selectUnit {
+  description: "Select all units"
+  statement: 
+    SELECT org.markn.mynetwork.Unit
+}
+
+query selectUnitByLessee {
+  description: "Select all units leased to a particular lessee"
+  statement: 
+    SELECT org.markn.mynetwork.Unit
+      WHERE (lessee == _$tenantId)
+}
