@@ -1,4 +1,4 @@
-/** Queries for dlease business network
+/** Queries for lease business network
 */
 
 query selectProperty {
@@ -24,5 +24,24 @@ query selectUnitByLessee {
   description: "Select all units leased to a particular lessee"
   statement: 
     SELECT org.markn.mynetwork.Unit
-      WHERE (lessee == _$tenantId)
+      WHERE (lessee == _$lessee)
+}
+query selectPhoneNumberById {
+  description: "Select tenant by the specified tenantId"
+  statement: 
+    SELECT org.markn.mynetwork.Tenant
+      WHERE (tenantId == _$tenantId)
+}
+query showUnitAllHistorian {
+  description: "Select history of Unit transactions"
+  statement: 
+    SELECT org.hyperledger.composer.system.HistorianRecord
+    WHERE (transactionType == 'AddAsset' OR transactionType == 
+'UpdateAsset' OR transactionType == 'RemoveAsset')
+}
+query findUnitHistoriansWithTime{ 
+  description: "Find commodity historians after a specified time" 
+  statement: 
+    SELECT org.hyperledger.composer.system.HistorianRecord FROM 
+HistorianRegistry WHERE (transactionTimestamp > _$justnow) 
 }

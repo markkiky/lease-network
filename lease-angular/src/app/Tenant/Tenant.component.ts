@@ -37,6 +37,7 @@ export class TenantComponent implements OnInit {
   idNo = new FormControl('', Validators.required);
   email = new FormControl('', Validators.required);
   phoneNumber = new FormControl('', Validators.required);
+  paid = new FormControl('', Validators.required);
 
 
   constructor(public serviceTenant: TenantService, fb: FormBuilder) {
@@ -45,7 +46,8 @@ export class TenantComponent implements OnInit {
       fullName: this.fullName,
       idNo: this.idNo,
       email: this.email,
-      phoneNumber: this.phoneNumber
+      phoneNumber: this.phoneNumber,
+      paid: this.paid
     });
   };
 
@@ -106,7 +108,8 @@ export class TenantComponent implements OnInit {
       'fullName': this.fullName.value,
       'idNo': this.idNo.value,
       'email': this.email.value,
-      'phoneNumber': this.phoneNumber.value
+      'phoneNumber': this.phoneNumber.value,
+      'paid': this.paid.value
     };
 
     this.myForm.setValue({
@@ -114,7 +117,8 @@ export class TenantComponent implements OnInit {
       'fullName': null,
       'idNo': null,
       'email': null,
-      'phoneNumber': null
+      'phoneNumber': null,
+      'paid': null
     });
 
     return this.serviceTenant.addParticipant(this.participant)
@@ -126,7 +130,8 @@ export class TenantComponent implements OnInit {
         'fullName': null,
         'idNo': null,
         'email': null,
-        'phoneNumber': null
+        'phoneNumber': null,
+        'paid': null
       });
       this.loadAll(); 
     })
@@ -146,7 +151,8 @@ export class TenantComponent implements OnInit {
       'fullName': this.fullName.value,
       'idNo': this.idNo.value,
       'email': this.email.value,
-      'phoneNumber': this.phoneNumber.value
+      'phoneNumber': this.phoneNumber.value,
+      'paid': this.paid.value
     };
 
     return this.serviceTenant.updateParticipant(form.get('tenantId').value, this.participant)
@@ -201,7 +207,8 @@ export class TenantComponent implements OnInit {
         'fullName': null,
         'idNo': null,
         'email': null,
-        'phoneNumber': null
+        'phoneNumber': null,
+        'paid': null
       };
 
       if (result.tenantId) {
@@ -234,6 +241,12 @@ export class TenantComponent implements OnInit {
         formObject.phoneNumber = null;
       }
 
+      if (result.paid) {
+        formObject.paid = result.paid;
+      } else {
+        formObject.paid = null;
+      }
+
       this.myForm.setValue(formObject);
     })
     .catch((error) => {
@@ -254,7 +267,8 @@ export class TenantComponent implements OnInit {
       'fullName': null,
       'idNo': null,
       'email': null,
-      'phoneNumber': null
+      'phoneNumber': null,
+      'paid': null
     });
   }
 }

@@ -30,10 +30,14 @@ import {Event} from './org.hyperledger.composer.system';
       idNo: string;
       email: string;
       phoneNumber: string;
+      paid: boolean;
    }
    export class Lease extends Transaction {
       unit: Unit;
       newLessee: Tenant;
+   }
+   export class LeaseNotification extends Event {
+      unit: Unit;
    }
    export enum UnitType {
       ThreeBedroom,

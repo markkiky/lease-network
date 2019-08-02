@@ -16,34 +16,49 @@ asset Unit identified by unitId extends Property {
   o String unitName
   o UnitType type
   o Double rentAmount //Include other values like trash and security deposit
-  o Double trnValue
+  o Integer trnValue default=0 optional
 
   --> Tenant lessee optional
-  --> Tenant[] previous optional
 }
+asset Payment identified by paymentId {
+  o String paymentId
+  --> Unit unitName
+  o String currencyCode
+  --> Unit rentAmount
 
+}
 //A Landlord participant 
 participant Landlord identified by landlordId {
   o String landlordId
   o String fullName
-  o String email regex=/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
-  o String phoneNumber regex=/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
-  --> Property[] properties optional
+  o String email regex = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+  o String phoneNumber regex= /^\+?((?:9[679]|8[035789]|6[789]|5[90]|42|3[578]|2[1-689])|9[0-58]|8[1246]|6[0-6]|5[1-8]|4[013-9]|3[0-469]|2[70]|7|1)(?:\W*\d){0,13}\d$/
+  o Double wallet optional 
+  //o Date birthday
 }
 
 //A Tenant partcipant - cannot create Assets
 participant Tenant identified by tenantId {
   o String tenantId
   o String fullName 
-  o String idNo regex=/^\d{8}$/
-  o String email regex=/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
-  o String phoneNumber regex=/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
+  o String idNo regex = /^\d{8}$/
+  o String email regex = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+  o String phoneNumber regex = /^\+?((?:9[679]|8[035789]|6[789]|5[90]|42|3[578]|2[1-689])|9[0-58]|8[1246]|6[0-6]|5[1-8]|4[013-9]|3[0-469]|2[70]|7|1)(?:\W*\d){0,13}\d$/
+  
 }
 
 //A transaction to lease a unit to Tenant
 transaction Lease {
   --> Unit unit
   --> Tenant newLessee
+}
+transaction Payments {
+  --> Payment newPayment
+  --> Unit unit
+}
+// Event emitted by lease transaction
+event LeaseNotification {
+  --> Unit unit
 }
 
 // Enum for unit types
@@ -55,3 +70,23 @@ enum UnitType {
   o Single
   o Lab
 }
+/*
+asset HistorianRecord identified by transactionId {
+  o String transactionId
+  o String transactionType
+  --> Lease lease
+  --> Tenant tenant  optional
+  o Event[] LeaseNotification optional
+  o DateTime transactionTimestamp
+}
+
+asset HistorianRecord identified by transactionId {
+  o String      transactionId
+  o String      transactionType
+  ‑‑> Transaction transactionInvoked
+  ‑‑> Participant participantInvoking  optional
+  ‑‑> Identity    identityUsed         optional
+  o Event[]       eventsEmitted        optional
+  o DateTime      transactionTimestamp
+}
+*/

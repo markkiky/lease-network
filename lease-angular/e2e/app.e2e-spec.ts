@@ -31,13 +31,13 @@ describe('Starting tests for lease-angular', function() {
     })
   });
 
-  it('network-name should be lease-network@0.0.1',() => {
+  it('network-name should be lease-network@0.0.7',() => {
     element(by.css('.network-name')).getWebElement()
     .then((webElement) => {
       return webElement.getText();
     })
     .then((txt) => {
-      expect(txt).toBe('lease-network@0.0.1.bna');
+      expect(txt).toBe('lease-network@0.0.7.bna');
     });
   });
 
@@ -119,10 +119,10 @@ describe('Starting tests for lease-angular', function() {
       });
     });
 
-    it('Tenant table should have 6 columns',() => {
+    it('Tenant table should have 7 columns',() => {
       page.navigateTo('/Tenant');
       element.all(by.css('.thead-cols th')).then(function(arr) {
-        expect(arr.length).toEqual(6); // Addition of 1 for 'Action' column
+        expect(arr.length).toEqual(7); // Addition of 1 for 'Action' column
       });
     });
   

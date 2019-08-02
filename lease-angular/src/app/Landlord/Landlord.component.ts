@@ -56,22 +56,22 @@ export class LandlordComponent implements OnInit {
   loadAll(): Promise<any> {
     const tempList = [];
     return this.serviceLandlord.getAll()
-    .toPromise()
-    .then((result) => {
-      this.errorMessage = null;
-      result.forEach(participant => {
-        tempList.push(participant);
+      .toPromise()
+      .then((result) => {
+        this.errorMessage = null;
+        result.forEach(participant => {
+          tempList.push(participant);
+        });
+        this.allParticipants = tempList;
+      })
+      .catch((error) => {
+        if (error === 'Server error') {
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else if (error === '404 - Not Found') {
+          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+          this.errorMessage = error;
+        }
       });
-      this.allParticipants = tempList;
-    })
-    .catch((error) => {
-      if (error === 'Server error') {
-        this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-      } else if (error === '404 - Not Found') {
-        this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        this.errorMessage = error;
-      }
-    });
   }
 
 	/**
@@ -118,29 +118,29 @@ export class LandlordComponent implements OnInit {
     });
 
     return this.serviceLandlord.addParticipant(this.participant)
-    .toPromise()
-    .then(() => {
-      this.errorMessage = null;
-      this.myForm.setValue({
-        'landlordId': null,
-        'fullName': null,
-        'email': null,
-        'phoneNumber': null,
-        'properties': null
+      .toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this.myForm.setValue({
+          'landlordId': null,
+          'fullName': null,
+          'email': null,
+          'phoneNumber': null,
+          'properties': null
+        });
+        this.loadAll();
+      })
+      .catch((error) => {
+        if (error === 'Server error') {
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else {
+          this.errorMessage = error;
+        }
       });
-      this.loadAll(); 
-    })
-    .catch((error) => {
-      if (error === 'Server error') {
-        this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-      } else {
-        this.errorMessage = error;
-      }
-    });
   }
 
 
-   updateParticipant(form: any): Promise<any> {
+  updateParticipant(form: any): Promise<any> {
     this.participant = {
       $class: 'org.markn.mynetwork.Landlord',
       'fullName': this.fullName.value,
@@ -150,40 +150,40 @@ export class LandlordComponent implements OnInit {
     };
 
     return this.serviceLandlord.updateParticipant(form.get('landlordId').value, this.participant)
-    .toPromise()
-    .then(() => {
-      this.errorMessage = null;
-      this.loadAll();
-    })
-    .catch((error) => {
-      if (error === 'Server error') {
-        this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-      } else if (error === '404 - Not Found') {
-        this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-      } else {
-        this.errorMessage = error;
-      }
-    });
+      .toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this.loadAll();
+      })
+      .catch((error) => {
+        if (error === 'Server error') {
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else if (error === '404 - Not Found') {
+          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+        } else {
+          this.errorMessage = error;
+        }
+      });
   }
 
 
   deleteParticipant(): Promise<any> {
 
     return this.serviceLandlord.deleteParticipant(this.currentId)
-    .toPromise()
-    .then(() => {
-      this.errorMessage = null;
-      this.loadAll();
-    })
-    .catch((error) => {
-      if (error === 'Server error') {
-        this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-      } else if (error === '404 - Not Found') {
-        this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-      } else {
-        this.errorMessage = error;
-      }
-    });
+      .toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this.loadAll();
+      })
+      .catch((error) => {
+        if (error === 'Server error') {
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else if (error === '404 - Not Found') {
+          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+        } else {
+          this.errorMessage = error;
+        }
+      });
   }
 
   setId(id: any): void {
@@ -193,58 +193,58 @@ export class LandlordComponent implements OnInit {
   getForm(id: any): Promise<any> {
 
     return this.serviceLandlord.getparticipant(id)
-    .toPromise()
-    .then((result) => {
-      this.errorMessage = null;
-      const formObject = {
-        'landlordId': null,
-        'fullName': null,
-        'email': null,
-        'phoneNumber': null,
-        'properties': null
-      };
+      .toPromise()
+      .then((result) => {
+        this.errorMessage = null;
+        const formObject = {
+          'landlordId': null,
+          'fullName': null,
+          'email': null,
+          'phoneNumber': null,
+          'properties': null
+        };
 
-      if (result.landlordId) {
-        formObject.landlordId = result.landlordId;
-      } else {
-        formObject.landlordId = null;
-      }
+        if (result.landlordId) {
+          formObject.landlordId = result.landlordId;
+        } else {
+          formObject.landlordId = null;
+        }
 
-      if (result.fullName) {
-        formObject.fullName = result.fullName;
-      } else {
-        formObject.fullName = null;
-      }
+        if (result.fullName) {
+          formObject.fullName = result.fullName;
+        } else {
+          formObject.fullName = null;
+        }
 
-      if (result.email) {
-        formObject.email = result.email;
-      } else {
-        formObject.email = null;
-      }
+        if (result.email) {
+          formObject.email = result.email;
+        } else {
+          formObject.email = null;
+        }
 
-      if (result.phoneNumber) {
-        formObject.phoneNumber = result.phoneNumber;
-      } else {
-        formObject.phoneNumber = null;
-      }
+        if (result.phoneNumber) {
+          formObject.phoneNumber = result.phoneNumber;
+        } else {
+          formObject.phoneNumber = null;
+        }
 
-      if (result.properties) {
-        formObject.properties = result.properties;
-      } else {
-        formObject.properties = null;
-      }
+        if (result.properties) {
+          formObject.properties = result.properties;
+        } else {
+          formObject.properties = null;
+        }
 
-      this.myForm.setValue(formObject);
-    })
-    .catch((error) => {
-      if (error === 'Server error') {
-        this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-      } else if (error === '404 - Not Found') {
-        this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-      } else {
-        this.errorMessage = error;
-      }
-    });
+        this.myForm.setValue(formObject);
+      })
+      .catch((error) => {
+        if (error === 'Server error') {
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else if (error === '404 - Not Found') {
+          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+        } else {
+          this.errorMessage = error;
+        }
+      });
 
   }
 
